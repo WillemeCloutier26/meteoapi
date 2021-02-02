@@ -6,8 +6,10 @@ le "requests" va me retouner des données de l'api et ensuite avec des outils im
 Cette partie fait en sorte qu'on aille l'historique météorologique de six jours dans le passé et en plus aujourd'hui.
 On va aussi demander la journée et l'heure qu'on désire avoir l'historique météorologique.
 """
-
 import requests
+import sys
+from PyQt5.QtWidgets import QMainWindow, QApplication, QAction, qApp, QTextEdit, QPushButton, QHBoxLayout, QWidget, QVBoxLayout, QToolTip, QLineEdit, QLabel, QCheckBox, QComboBox, QGridLayout
+
 
 urls = requests.get('https://api.weather.com/v2/pws/observations/hourly/7day?stationId=IVICTORI1625&format=json&units=m&apiKey=21553e0235304f40953e0235300f4055').json()
 
@@ -15,3 +17,4 @@ hoursInWeek = len(urls["observations"])
 
 for day in range(hoursInWeek):
    print(urls["observations"][day]["obsTimeLocal"] , urls["observations"][day]["metric"])
+

@@ -8,11 +8,15 @@ On va aussi demander la journée qu'on désire avoir la prévision météorologi
 """
 
 import requests
+import sys
+from PyQt5.QtWidgets import QMainWindow, QApplication, QAction, qApp, QTextEdit, QPushButton, QHBoxLayout, QWidget, QVBoxLayout, QToolTip, QLineEdit, QLabel, QCheckBox, QComboBox, QGridLayout
 
-urls = requests.get('https://api.weather.com/v3/wx/forecast/daily/5day?geocode=46.05,-71.96&format=json&units=m&language=fr-CA&apiKey=21553e0235304f40953e0235300f4055').json()   
+urls = requests.get(
+    'https://api.weather.com/v3/wx/forecast/daily/5day?geocode=46.05,-71.96&format=json&units=m&language=fr-CA&apiKey=21553e0235304f40953e0235300f4055').json()
 print(urls["dayOfWeek"])
 search_day = input("Donner la journée voulu : ")
 search_day_number = 0
+day_number_part = search_day_number
 
 
 dayInWeek = len(urls["dayOfWeek"])
@@ -21,4 +25,15 @@ for day in range(dayInWeek):
         search_day_number = day
         break
 
-print (urls["narrative"][search_day_number])
+if search_day_number == 0:
+    day_number_part = 0
+elif search_day_number == 1:
+    day_number_part = 2
+elif search_day_number == 2:
+    day_number_part = 4
+elif search_day_number == 3:
+    day_number_part = 6
+elif search_day_number == 4:
+    day_number_part = 8
+elif search_day_number == 5:
+    day_number_part = 10
