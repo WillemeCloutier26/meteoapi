@@ -62,12 +62,70 @@ for day in range(hoursInWeek):
 ulrsmaintenant = requests.get(
     'https://api.weather.com/v2/pws/observations/current?stationId=IVICTORI1625&format=json&units=m&apiKey=21553e0235304f40953e0235300f4055').json()
 
-#print(ulrsmaintenant["observations"][0]["metric"])
+string_maintenant = ""
+string_maintenant = str(ulrsmaintenant["observations"][0]["metric"]["temp"])
+string_prevision = ""
+string_prevision = str(ulrsmaintenant["observations"][search_day_number]["metric"]["temp"])
 
 
 #######################################################################################################################################################
 #######################################################################################################################################################
 #######################################################################################################################################################
+
+
+image_jour = (urlsjour["daypart"][0]["wxPhraseLong"][0])
+img = ""
+
+if image_jour == "Pluie / Neige" and ulrsmaintenant["observations"][0]["metric"]["temp"] <0 :
+    img = "Neige.png"
+elif image_jour == "Chutes de neige":
+    img = "Neige.png"
+elif image_jour == "Peu nuageux":
+    img = "Nuage.png"
+elif image_jour == "Plutôt ensoleillé":
+    img = "Soleil.png"
+elif image_jour == "Ensoleillé":
+    img = "Soleil.png"
+elif image_jour == "Nuageux":
+    img = "Nuage.png"
+elif image_jour == "Chutes de neige dans l’après-midi":
+    img = "Neige.png"
+elif image_jour == "Chutes de neige dans la matinée":
+    img = "Neige.png"
+elif image_jour == "Pluie / Neige" and ulrsmaintenant["observations"][0]["metric"]["temp"] >0:
+    img = "Pluie.png"
+elif image_jour == "Précipitations hivernales":
+    img = "Neige.png"
+elif image_jour == "Pluie verglaçante devenant neige":
+    img = "Pluie.png"
+elif image_jour == "Plutôt ensoleillé":
+    img = "Soleil.png"
+
+image_prévision = (urlsjour["daypart"][day_number_part]["wxPhraseLong"][0])
+img_prévision = ""
+
+if image_jour == "Pluie / Neige" and ulrsmaintenant["observations"][0]["metric"]["temp"] <0 :
+    img_prévision = "Neige.png"
+elif image_jour == "Chutes de neige":
+    img_prévision = "Neige.png"
+elif image_jour == "Peu nuageux":
+    img_prévision = "Nuage.png"
+elif image_jour == "Plutôt ensoleillé":
+    img_prévision = "Soleil.png"
+elif image_jour == "Ensoleillé":
+    img_prévision = "Soleil.png"
+elif image_jour == "Nuageux":
+    img_prévision = "Nuage.png"
+elif image_jour == "Chutes de neige dans l’après-midi":
+    img_prévision = "Neige.png"
+elif image_jour == "Chutes de neige dans la matinée":
+    img_prévision = "Neige.png"
+elif image_jour == "Pluie / Neige" and ulrsmaintenant["observations"][0]["metric"]["temp"] >0:
+    img_prévision = "Pluie.png"
+elif image_jour == "Précipitations hivernales":
+    img_prévision = "Neige.png"
+
+
 #######################################################################################################################################################
 #######################################################################################################################################################
 #######################################################################################################################################################
@@ -87,47 +145,54 @@ class Window(QMainWindow):
         self.setGeometry(self.top, self.left, self.width, self.height)
 
         buttonWindow1 = QPushButton('Météo dans les jours à suivre', self)
-        buttonWindow1.setGeometry(100, 100, 200, 40) 
         buttonWindow1.clicked.connect(self.buttonWindow1_onClick)
+        self.lineEdit1 = QLineEdit("Écrire la journée que vous désirer", self)
+        buttonWindow1.setGeometry(100, 100, 200, 40) 
+        self.lineEdit1.setGeometry(400, 100, 200, 40) 
 
         buttonWindow2 = QPushButton('Historique de Météo', self)
-        buttonWindow2.setGeometry(100, 200, 200, 40) 
         buttonWindow2.clicked.connect(self.buttonWindow2_onClick)
+        self.lineEdit2 = QLineEdit("Type here what you want to transfer for [Window1].", self) ########
+        buttonWindow2.setGeometry(100, 200, 200, 40)
+        self.lineEdit2.setGeometry(400, 200, 200, 40)  ########
 
         buttonWindow3 = QPushButton('Météo immédiatement', self)
-        buttonWindow3.setGeometry(100, 300, 200, 40) 
         buttonWindow3.clicked.connect(self.buttonWindow3_onClick)
+        buttonWindow3.setGeometry(100, 300, 200, 40) 
         self.show()
 
     @pyqtSlot()
     def buttonWindow1_onClick(self):
-        self.statusBar().showMessage("Switched to window 1")
+        self.statusBar().showMessage("Changer pour Météo à venir")
+        self.cams = Window1(self.lineEdit1.text()) 
         self.cams.show()
         self.close()
 
     @pyqtSlot()
     def buttonWindow2_onClick(self):
-        self.statusBar().showMessage("Switched to window 2")
+        self.statusBar().showMessage("Changer pour l'historique")
+        self.cams = Window2(self.lineEdit2.text()) 
         self.cams.show()
         self.close()
 
     @pyqtSlot()
     def buttonWindow3_onClick(self):
-        self.statusBar().showMessage("Switched to window 3")
+        self.statusBar().showMessage("Changer pour Météo Maintenant")
+        self.cams = Window3(string_maintenant) 
         self.cams.show()
         self.close()
 
 class Window1(QDialog):
-    def __init__(self, value, parent=None):
+    def __init__(self,value, parent=None):
         super().__init__(parent)
-        self.setWindowTitle('Window1')
+        self.setWindowTitle('Météo Prévision')
         self.setWindowIcon(self.style().standardIcon(
             QStyle.SP_FileDialogInfoView))
 
         label1 = QLabel(value)
         self.button = QPushButton()
         self.button.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        self.button.setIcon(self.style().standardIcon(QStyle.SP_ArrowLeft))
+        self.button.setIcon(QIcon(img_prévision))
         self.button.setIconSize(QSize(200, 200))
 
         layoutV = QVBoxLayout()
@@ -153,7 +218,7 @@ class Window1(QDialog):
 class Window2(QDialog):
     def __init__(self, value, parent=None):
         super().__init__(parent)
-        self.setWindowTitle('Window2')
+        self.setWindowTitle('Historique Météo')
         self.setWindowIcon(self.style().standardIcon(
             QStyle.SP_FileDialogInfoView))
 
@@ -193,7 +258,7 @@ class Window3(QDialog):
         label1 = QLabel(value)
         self.button = QPushButton()
         self.button.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
-        self.button.setIcon(self.style().standardIcon(QStyle.SP_ArrowLeft))
+        self.button.setIcon(QIcon(img))
         self.button.setIconSize(QSize(200, 200))
 
         layoutV = QVBoxLayout()
