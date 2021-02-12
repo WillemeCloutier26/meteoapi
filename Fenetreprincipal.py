@@ -6,12 +6,13 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from textjouer import stringToucher, meteoallo
 
+#Initialisation de la valeur de retour. Elle sera changé plus tard.
 list_retour = meteoallo("Vendredi")
 
 
 """
 Willème Cloutier
-Ceci est un projet d'approfondissement afin d'améliorer mes capacités avec python et la gestion de donné. 
+Ceci est un projet d'approfondissement afin d'améliorer mes capacités avec python et la gestion de donnée. 
 l'importation de "requests" va me permettre d'utiliser une api afin de pouvoir faciliter l'utilisation d'un satelite personnel établie dans le périmetre de Victoriaville.
 le "requests" va me retouner des données de l'api et ensuite avec des outils implémenter dans python je vais le mettre en json pour faciliter la compréhension.
 Cette partie fait en sorte qu'on aille la prévision météorologique de cinq jours dans le futurs et en plus aujourd'hui.
@@ -20,6 +21,8 @@ On va aussi demander la journée qu'on désire avoir la prévision météorologi
 #######################################################################################################################################################
 #######################################################################################################################################################
 #######################################################################################################################################################
+
+""" Initialisation de la fenetre principale"""
 
 class Window(QMainWindow):
     def __init__(self):
@@ -46,13 +49,15 @@ class Window(QMainWindow):
         buttonWindow3.setGeometry(50, 300, 200, 40)
         self.show()
 
+    """  Les fonction Onclick des buttons """
+    """ Dans la premieres fonction on voit la variable global qui va être nécessaire pour changer le retour"""
+
     @pyqtSlot()
     def buttonWindow1_onClick(self):
         self.statusBar().showMessage("Changer pour Météo à venir")
         search_day = stringToucher(self.lineEdit1.text())
         global list_retour 
         list_retour = meteoallo(self.lineEdit1.text())
-        print(list_retour)
         self.cams = Window1(self.lineEdit1.text())
         self.cams.show()
         self.close()
@@ -64,7 +69,9 @@ class Window(QMainWindow):
         self.cams.show()
         self.close()
 
-print(list_retour)
+
+    """ Les fenetres de PYQT"""
+    
 class Window1(QDialog):
     def __init__(self, value, parent=None):
         super().__init__(parent)
